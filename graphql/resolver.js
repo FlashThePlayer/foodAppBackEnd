@@ -60,5 +60,19 @@ module.exports = {
       createdAt: dbFood.createdAt.toISOString(),
       updatedAt: dbFood.updatedAt.toISOString()
     };
+  },
+  getRandomFood: async function(args, req) {
+    const dbFoods = await Food.find();
+    if (dbFoods.length <= 0) {
+      Error.throwError(401, "no food found!");
+    }
+    const randomFood = dbFoods[Math.floor(Math.random() * dbFoods.length)];
+
+    return {
+      ...randomFood._doc,
+      _id: randomFood._id.toString(),
+      createdAt: randomFood.createdAt.toISOString(),
+      updatedAt: randomFood.updatedAt.toISOString()
+    };
   }
 };
