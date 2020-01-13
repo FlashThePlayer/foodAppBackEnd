@@ -1,7 +1,0 @@
-{
-  "env": {
-    "MONGO_USER": "timu",
-    "MONGO_PASSWORD": "rk5zyweDFIf7gYzS",
-    "MONGO_DATABASE": "foodApp"
-  }
-}
