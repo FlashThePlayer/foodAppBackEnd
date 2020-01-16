@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const graphHttp = require("express-graphql");
 const bodyParser = require("body-parser");
 
-const graphResolver = require("./graphql/resolver");
-const graphSchema = require("./graphql/schema");
+const graphResolver = require("./graphql/RootResolver");
+const graphSchema = require("./graphql/RootSchema");
 
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@nodecluster-knux1.mongodb.net/${process.env.MONGO_DATABASE}`;
 

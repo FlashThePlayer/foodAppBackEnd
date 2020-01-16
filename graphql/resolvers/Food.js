@@ -55,3 +55,27 @@ exports.getRandomFood = async function(args, req) {
     updatedAt: randomFood.updatedAt.toISOString()
   };
 };
+
+exports.getFoods = async ({ page }, req) => {
+  if (!page) {
+    page = 1;
+  }
+  const FOODS_PER_PAGE = 5;
+  const foodCount = Food.find().countDocuments();
+  const skipFoods = page === 1 ? 0 : page * FOODS_PER_PAGE;
+  const foods = await Food.find()
+    .sort({ createdAt: -1 })
+    .skip(skipFoods)
+    .limit(FOODS_PER_PAGE);
+  return {
+    foods: foods.map(food => {
+      return {
+        ...food._doc,
+        _id: food._id.toString(),
+        createdAt: food.createdAt.toISOString(),
+        updatetAt: food.updatedAt.toISOString()
+      };
+    }),
+    totalPages: foodCount
+  };
+};
