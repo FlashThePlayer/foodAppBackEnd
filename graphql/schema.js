@@ -1,57 +1,8 @@
 const { buildSchema } = require("graphql");
+const { mergeTypes } = require("merge-graphql-schemas");
 
-module.exports = buildSchema(`
+const Food = require("./schemas/Food");
+const User = require("./schemas/User");
 
-    type User {
-        _id: ID!
-        name: String!
-        email: String!
-        password: String
-        addedFood: [Food!]
-    }
-
-    type Food {
-        _id: ID!
-        name: String!
-        link: String!
-        favorite: Boolean!
-        rating: Int!
-        difficulty: String!
-        creator: User!
-        keywords: [String!]
-        createdAt: String!
-        updatedAt: String!
-    }
-
-    input UserInputData {
-        name: String!
-        password: String!
-        email: String!
-    }
-
-    input FoodInputData {
-        name: String!
-        link: String!
-        favorite: Boolean!
-        rating: Int!
-        difficulty: String!
-        keywords: [String!]
-    }
-
-
-    type RootMutation {
-        createUser(userInput: UserInputData): User!
-        createFood(foodInput: FoodInputData): Food!
-    } 
-
-    type RootQuery {
-       getFood(name: String): Food! 
-       getRandomFood: Food!
-    }
-
-    schema {
-        query: RootQuery
-        mutation: RootMutation
-    }
-
-`);
+const mergedTypes = mergeTypes([Food, User]);
+module.exports = buildSchema(mergedTypes);
