@@ -10,7 +10,7 @@ const foodSchema = new Schema(
     rating: { type: Number, required: true },
     difficulty: { type: String, required: true },
     creator: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    keywords: [{ keyword: { type: String, require: true } }]
+    keywords: [{ type: String, require: true }]
   },
   { timestamps: true }
 );

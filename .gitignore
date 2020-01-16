@@ -166,3 +166,6 @@ temp/
 
 # nodemon 
 nodemon.json
+
+# intellij
+.idea/*

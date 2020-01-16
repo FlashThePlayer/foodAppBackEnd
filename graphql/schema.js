@@ -46,7 +46,7 @@ module.exports = buildSchema(`
 
     type RootQuery {
        getFood(name: String): Food! 
-       getRandomFood(): Food!
+       getRandomFood: Food!
     }
 
     schema {
