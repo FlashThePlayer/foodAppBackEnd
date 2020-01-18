@@ -42,14 +42,14 @@ exports.getFood = async function({ name }, req) {
 };
 
 exports.getRandomFood = async function(args, req) {
-  const dbFoods = await Food.find();
+  const dbFoods = await Food.aggregate().sample(1); //returns an array
   if (dbFoods.length <= 0) {
     Error.throwError(401, "no food found!");
   }
-  const randomFood = dbFoods[Math.floor(Math.random() * dbFoods.length)]; // THIS NEEDS FIXING -> MONGO HAS A RANDOM FUNC!!!
 
+  const randomFood = dbFoods[0];
   return {
-    ...randomFood._doc,
+    ...randomFood,
     _id: randomFood._id.toString(),
     createdAt: randomFood.createdAt.toISOString(),
     updatedAt: randomFood.updatedAt.toISOString()

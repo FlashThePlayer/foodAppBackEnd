@@ -34,6 +34,5 @@ type Query {
 
 type Mutation {
     createFood(foodInput: FoodInputData): Food!
-
 } 
 `;

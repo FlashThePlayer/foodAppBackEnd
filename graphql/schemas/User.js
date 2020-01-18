@@ -7,13 +7,19 @@ type User {
     addedFood: [Food!]
 }
 
-input UserInputData {
+input createUserInputData {
     name: String!
     password: String!
     email: String!
 }
 
+input loginUserInputData {
+    password: String!
+    email: String!
+}
+
 type Mutation {
-    createUser(userInput: UserInputData): User!
+    createUser(userInput: createUserInputData): User!
+    loginUser(userInput: loginUserInputData): String!
 }
 `;

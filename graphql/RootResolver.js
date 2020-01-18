@@ -1,4 +1,4 @@
-const { createUser } = require("./resolvers/User");
+const { createUser, loginUser } = require("./resolvers/User");
 const {
   createFood,
   getFood,
@@ -8,6 +8,7 @@ const {
 
 module.exports = {
   createUser: createUser,
+  loginUser: loginUser,
   createFood: createFood,
   getFood: getFood,
   getFoods: getFoods,
