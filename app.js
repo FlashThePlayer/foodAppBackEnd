@@ -6,9 +6,12 @@ const bodyParser = require("body-parser");
 const graphResolver = require("./graphql/RootResolver");
 const graphSchema = require("./graphql/RootSchema");
 
+const auth = require("./middleware/Authenticate");
+
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@nodecluster-knux1.mongodb.net/${process.env.MONGO_DATABASE}`;
 
 const app = express();
+app.disable('x-powered-by');
 
 app.use((req, res, next) => {
   //gotta better understand why im using this?!
@@ -23,6 +26,8 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use(auth);
 
 app.use(
   "/graphql",

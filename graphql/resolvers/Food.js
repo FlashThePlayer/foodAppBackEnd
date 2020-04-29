@@ -1,11 +1,18 @@
 const User = require("../../models/User");
 const Food = require("../../models/Food");
-const Error = require("../../util/Error");
+const UtilError = require("../../util/Error");
+
+const mongoose = require("mongoose");
 
 exports.createFood = async function({ foodInput }, req) {
-  const user = await User.findOne({ name: "timu" });
+  if (!req.isAuth) {
+    UtilError.throwError(401, "not authenticated!");
+  }
+
+  // const user = await User.findById(req.userId);
+  const user = await User.findOne({ name: "timu" }); //only for testing
   if (!user) {
-    Error.throwError(401, "user not found!");
+    UtilError.throwError(401, "user not found!");
   }
 
   const food = new Food({
@@ -28,23 +35,39 @@ exports.createFood = async function({ foodInput }, req) {
   };
 };
 
-exports.getFood = async function({ name }, req) {
-  const dbFood = await Food.findOne({ name: name });
-  if (!dbFood) {
-    Error.throwError(404, "food not found!");
+exports.searchFood = async function({ name }, req) {
+  if (!req.isAuth) {
+    UtilError.throwError(401, "not authenticated!");
   }
-  return {
-    ...dbFood._doc,
-    _id: dbFood._id.toString(),
-    createdAt: dbFood.createdAt.toISOString(),
-    updatedAt: dbFood.updatedAt.toISOString()
-  };
+
+  const dbFoods = await Food.find({
+    name: name,
+    creator: new mongoose.Types.ObjectId(req.userId)
+  });
+  if (!dbFoods) {
+    UtilError.throwError(404, "food not found!");
+  }
+
+  const returnValue = dbFoods.map(food => {
+    return {
+      ...food._doc,
+      _id: food._id.toString(),
+      createdAt: food.createdAt.toISOString(),
+      updatetAt: food.updatedAt.toISOString()
+    };
+  });
+
+  return returnValue;
 };
 
 exports.getRandomFood = async function(args, req) {
+  if (!req.isAuth) {
+    UtilError.throwError(401, "not authenticated!");
+  }
+
   const dbFoods = await Food.aggregate().sample(1); //returns an array
   if (dbFoods.length <= 0) {
-    Error.throwError(401, "no food found!");
+    UtilError.throwError(401, "no food found!");
   }
 
   const randomFood = dbFoods[0];
@@ -57,6 +80,10 @@ exports.getRandomFood = async function(args, req) {
 };
 
 exports.getFoods = async ({ page }, req) => {
+  if (!req.isAuth) {
+    UtilError.throwError(401, "not authenticated!");
+  }
+
   if (!page) {
     page = 1;
   }

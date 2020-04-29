@@ -1,11 +1,18 @@
 const bycript = require("bcrypt");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
 const User = require("../../models/User");
-const UtilError = require("../../util/Error")
+const UtilError = require("../../util/Error");
 
-exports.createUser = async function({ createUserInput }, req) {
+exports.createUser = async function({ userInput }, req) {
   const hashedpass = await bycript.hash(userInput.password, 12);
+
+  const existingUser = await User.findOne({ email: userInput.email });
+
+  if (existingUser) {
+    UtilError.throwError(403, "Email already used!");
+  }
+
   const user = new User({
     name: userInput.name,
     email: userInput.email,
@@ -23,34 +30,30 @@ exports.createUser = async function({ createUserInput }, req) {
   };
 };
 
-exports.loginUser = async function({ loginUserInput }, req) {
-
+exports.loginUser = async function({ userInput }, req) {
   try {
-    
-    const email = loginUserInput.email;
-    const password = loginUserInput.password;
+    const email = userInput.email;
+    const password = userInput.password;
 
-    const user = await User.findOne({email: email});
+    const user = await User.findOne({ email: email });
 
-    if(!user){
+    if (!user) {
       UtilError.throwError(401, "Email or password wrong!");
     }
 
     const isEqual = await bycript.compare(password, user.password);
 
-    if(!isEqual){
+    if (!isEqual) {
       UtilError.throwError(401, "Email or password wrong!");
     }
 
     const token = jwt.sign(
-      { email: user.email,userId: user._id.toString()}, 
-      process.env.AUTH_TOKEN_SEC, 
-      {expiresIn: 3h}
-      );
-
+      { email: user.email, userId: user._id.toString() },
+      process.env.AUTH_TOKEN_SEC,
+      { expiresIn: "1h" }
+    );
+    return token;
   } catch (error) {
-    
+    UtilError.throwError(500, "Something went wrong :(");
   }
-
-
 };

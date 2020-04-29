@@ -27,9 +27,9 @@ type FoodData {
 }
 
 type Query {
-    getFood(name: String!): Food! 
+    searchFood(name: String!): [Food!]! 
     getFoods(page: Int): FoodData!
-    getRandomFood: Food!
+    getRandomFood(tags: [String!]): Food!
 }
 
 type Mutation {
