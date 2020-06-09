@@ -54,6 +54,6 @@ exports.loginUser = async function({ userInput }, req) {
     );
     return token;
   } catch (error) {
-    UtilError.throwError(500, "Something went wrong :(");
+    UtilError.throwError(error.code, error.message);
   }
 };
