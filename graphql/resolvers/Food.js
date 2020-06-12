@@ -1,6 +1,7 @@
 const User = require("../../models/User");
 const Food = require("../../models/Food");
 const UtilError = require("../../util/Error");
+const Query = require("../../util/QueryBuilder");
 
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
@@ -79,7 +80,7 @@ exports.getRandomFood = async function (args, req) {
   };
 };
 
-exports.getFoods = async ({ page }, req) => {
+exports.getFoods = async ({ page, query }, req) => {
   if (!req.isAuth) {
     UtilError.throwError(401, "not authenticated!");
   }
@@ -87,11 +88,15 @@ exports.getFoods = async ({ page }, req) => {
   if (!page) {
     page = 1;
   }
+
+  const selectQuery = Query.build(query, req.userId);
+
   const FOODS_PER_PAGE = 5;
-  const foodCount = await Food.find().select({creator: new ObjectId(req.userId)}).countDocuments();
+  const foodCount = await Food.find(selectQuery)
+    .countDocuments();
   const maxPageSize = Math.ceil(foodCount / FOODS_PER_PAGE);
   const skipFoods = (page - 1) * FOODS_PER_PAGE;
-  const foods = await Food.find()
+  const foods = await Food.find(selectQuery)
     .sort({ createdAt: -1 })
     .skip(skipFoods)
     .limit(FOODS_PER_PAGE);

@@ -21,14 +21,21 @@ input FoodInputData {
     keywords: [String!]
 }
 
-type FoodData {
+type FoodData { 
     foods: [Food!]!
     totalPages: Int!
 }
 
+input foodQuery {
+    name: String
+    favorite: Boolean
+    rating: Int
+    difficulty: String
+}
+
 type Query {
     searchFood(name: String!): [Food!]! 
-    getFoods(page: Int): FoodData!
+    getFoods(page: Int, query: foodQuery): FoodData!
     getRandomFood(tags: [String!]): Food!
 }
 
