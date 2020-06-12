@@ -39,7 +39,7 @@ app.use(
       if (!err.originalError) {
         return err;
       } else {
-        const data = err.originalError.data;
+        const data = err.originalError;
         const message = err.message || "an error occured";
         const status = err.originalError.code || 500;
         return { message: message, code: status, data: data };
