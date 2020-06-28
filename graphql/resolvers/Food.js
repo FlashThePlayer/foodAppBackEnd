@@ -4,7 +4,6 @@ const UtilError = require("../../util/Error");
 const Query = require("../../util/QueryBuilder");
 
 const mongoose = require("mongoose");
-const ObjectId = mongoose.Types.ObjectId;
 
 exports.createFood = async function ({ foodInput }, req) {
   if (!req.isAuth) {
