@@ -1,17 +1,17 @@
 module.exports = `
 
 type Day {
-    date: String!
     meals: [Food!]
+    date: String!
 }
 
-input createDayInputData {
+input DayInputData {
     date: String!
     foodId: [String!]!
 }
 
 type Mutation {
-    createDay(dayInput: [createDayInputData!]): Boolean!
+    createDay(dayInput: DayInputData!): Day!
 } 
 
 type Query {
