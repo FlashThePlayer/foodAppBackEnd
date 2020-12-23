@@ -1,5 +1,6 @@
 const User = require("../../models/User");
 const Day = require("../../models/Day");
+const Food = require("../../models/Food");
 const UtilError = require("../../util/Error");
 const Query = require("../../util/QueryBuilder");
 
@@ -15,37 +16,46 @@ exports.createDay = async function ({ dayInput }, req) {
     UtilError.throwError(401, "user not found!");
   }
 
-  const promiseArray = dayInput.map((data) => {
-    const foodIdArray = data.foodId.map((food) => {
-      return new mongoose.Types.ObjectId(food);
-    });
+  const dbFood = await Food.findById(dayInput.foodId);
+  if (!dbFood) {
+    UtilError.throwError(500, `food for id ${dayInput.foodId} not found!`);
+  }
 
-    const day = new Day({
-      date: data.date,
-      foods: foodIdArray,
-      creator: user,
-    });
-
-    return day.save();
+  const dbDay = await Day.findOne({
+    date: dayInput.date,
+    creator: new mongoose.Types.ObjectId(req.userId),
   });
 
-  const allPromiseResults = await Promise.allSettled(promiseArray);
+  let day;
 
-  const errors = allPromiseResults.filter(
-    (promise) => promise.status === "rejected"
-  );
+  if (!dbDay) {
+    day = new Day({
+      date: dayInput.date,
+      foods: [dbFood],
+      creator: user,
+    });
+  } else {
+    day = dbDay;
+    day.foods.push(dbFood);
+  }
 
-  return errors.length === 0;
+  const savedDay = await day.save();
+  const populatedDay = await Day.populate(savedDay, { path: "foods" });
+
+  return {
+    date: _yyyymmdd(populatedDay._doc.date),
+    meals: populatedDay._doc.foods,
+  };
 };
 
 exports.getDays = async ({ date }, req) => {
   if (!req.isAuth) {
-      UtilError.throwError(401, "not authenticated!");
+    UtilError.throwError(401, "not authenticated!");
   }
 
   const user = await User.findById(req.userId);
   if (!user) {
-      UtilError.throwError(401, "user not found!");
+    UtilError.throwError(401, "user not found!");
   }
 
   const weekArray = _getWeek(new Date(date));
@@ -63,21 +73,21 @@ exports.getDays = async ({ date }, req) => {
   try {
     const response = await Promise.all(promiseArray);
     const returnValue = [];
-    response.forEach((data) => {
+    response.forEach((data, index) => {
+      const mealDate = weekArray[index];
+      const meals = [];
       if (data.length !== 0) {
-        const date = data[0]._doc.date;
-        const meals = [];
         data[0]._doc.foods.forEach((foods) => {
           meals.push(foods._doc);
         });
-        returnValue.push({ date: _yyyymmdd(date), meals: meals });
       }
+      returnValue.push({ date: mealDate, meals: meals });
     });
     return returnValue;
   } catch (e) {
     UtilError.throwError(
-        500,
-        "Internal server error. Could not get all Days for week"
+      500,
+      "Internal server error. Could not get all Days for week"
     );
   }
 };
