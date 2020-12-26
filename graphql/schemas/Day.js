@@ -11,8 +11,6 @@ input DayInputData {
 }
 
 type Mutation {
-    deleteFoodFromDay(dayInput: DayInputData!): Day!
-    createDay(dayInput: DayInputData!): Day!
     patchDay(dayInput: DayInputData!): Day!
 } 
 
