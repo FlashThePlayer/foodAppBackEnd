@@ -1,5 +1,5 @@
 const { createUser, loginUser } = require("./resolvers/User");
-const { getDays, createDay } = require("./resolvers/Day");
+const { getDays, createDay, deleteFoodFromDay } = require("./resolvers/Day");
 const {
   createFood,
   getFoods,
@@ -12,6 +12,7 @@ module.exports = {
   createFood: createFood,
   getDays: getDays,
   createDay: createDay,
+  deleteFoodFromDay: deleteFoodFromDay,
   getFoods: getFoods,
   getRandomFood: getRandomFood
 };
