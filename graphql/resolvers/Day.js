@@ -6,6 +6,45 @@ const Query = require("../../util/QueryBuilder");
 
 const mongoose = require("mongoose");
 
+exports.deleteFoodFromDay = async function ({ dayInput }, req) {
+  if (!req.isAuth) {
+    UtilError.throwError(401, "not authenticated!");
+  }
+
+  const user = await User.findById(req.userId);
+  if (!user) {
+    UtilError.throwError(401, "user not found!");
+  }
+
+  const dbFood = await Food.findById(dayInput.foodId);
+  if (!dbFood) {
+    UtilError.throwError(500, `food for id ${dayInput.foodId} not found!`);
+  }
+
+  const dbDay = await Day.findOne({
+    date: dayInput.date,
+    creator: new mongoose.Types.ObjectId(req.userId),
+  });
+
+  if (!dbDay) {
+    UtilError.throwError(500, `Desired day could not be found!`);
+  }
+
+  const mealArray = [...dbDay.foods];
+  const removeIndex = mealArray.findIndex((foodId) => dbFood._id.equals(foodId));
+  mealArray.splice(removeIndex, 1); //result is NOT redundant
+
+  dbDay.foods = mealArray;
+
+  const savedDay = await dbDay.save();
+  const populatedDay = await Day.populate(savedDay, { path: "foods" });
+
+  return {
+    date: _yyyymmdd(populatedDay._doc.date),
+    meals: populatedDay._doc.foods,
+  };
+};
+
 exports.createDay = async function ({ dayInput }, req) {
   if (!req.isAuth) {
     UtilError.throwError(401, "not authenticated!");
