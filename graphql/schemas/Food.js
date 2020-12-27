@@ -3,11 +3,13 @@ type Food {
     _id: ID!
     name: String!
     link: String!
+    pictureLink: String!
     favorite: Boolean!
     rating: Int!
     difficulty: String!
     creator: User!
     keywords: [String!]
+    recipe: String!
     createdAt: String!
     updatedAt: String!
 }
@@ -15,10 +17,12 @@ type Food {
 input FoodInputData {
     name: String!
     link: String!
+    pictureLink: String!
     favorite: Boolean!
     rating: Int!
     difficulty: String!
     keywords: [String!]
+    recipe: String!
 }
 
 type FoodData { 

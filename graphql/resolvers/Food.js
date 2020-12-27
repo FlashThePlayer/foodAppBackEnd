@@ -18,6 +18,8 @@ exports.createFood = async function ({ foodInput }, req) {
   const food = new Food({
     name: foodInput.name,
     link: foodInput.link,
+    pictureLink: foodInput.pictureLink,
+    recipe: foodInput.recipe,
     favorite: foodInput.favorite,
     rating: foodInput.rating,
     difficulty: foodInput.difficulty,
