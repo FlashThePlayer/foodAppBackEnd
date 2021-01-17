@@ -40,6 +40,7 @@ input foodQuery {
 type Query {
     searchFood(name: String!): [Food!]! 
     getFoods(page: Int, query: foodQuery): FoodData!
+    getFood(id: String!): Food!
     getRandomFood(tags: [String!]): Food!
 }
 

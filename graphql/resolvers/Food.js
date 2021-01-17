@@ -37,6 +37,27 @@ exports.createFood = async function ({ foodInput }, req) {
   };
 };
 
+exports.getFood = async function ({ id }, req) {
+  if (!req.isAuth) {
+    UtilError.throwError(401, "not authenticated!");
+  }
+
+  const dbFood = await Food.findById(id);
+
+  if (!dbFood || dbFood.creator._id.toString() !== req.userId) {
+    // 404 is intentional, other users trying to get food
+    // from someone else should not know if they have the right id
+    UtilError.throwError(404, "food not found!");
+  }
+
+  return {
+    ...dbFood._doc,
+    _id: dbFood._id.toString(),
+    createdAt: dbFood.createdAt.toISOString(),
+    updatetAt: dbFood.updatedAt.toISOString(),
+  };
+};
+
 exports.searchFood = async function ({ name }, req) {
   if (!req.isAuth) {
     UtilError.throwError(401, "not authenticated!");
@@ -93,8 +114,7 @@ exports.getFoods = async ({ page, query }, req) => {
   const selectQuery = Query.build(query, req.userId);
 
   const FOODS_PER_PAGE = 5;
-  const foodCount = await Food.find(selectQuery)
-    .countDocuments();
+  const foodCount = await Food.find(selectQuery).countDocuments();
   const maxPageSize = Math.ceil(foodCount / FOODS_PER_PAGE);
   const skipFoods = (page - 1) * FOODS_PER_PAGE;
   const foods = await Food.find(selectQuery)

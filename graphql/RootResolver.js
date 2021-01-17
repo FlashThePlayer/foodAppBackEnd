@@ -3,7 +3,8 @@ const { getDays, patchDay } = require("./resolvers/Day");
 const {
   createFood,
   getFoods,
-  getRandomFood
+  getFood,
+  getRandomFood,
 } = require("./resolvers/Food");
 
 module.exports = {
@@ -13,5 +14,6 @@ module.exports = {
   getDays: getDays,
   patchDay: patchDay,
   getFoods: getFoods,
-  getRandomFood: getRandomFood
+  getFood: getFood,
+  getRandomFood: getRandomFood,
 };
