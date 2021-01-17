@@ -37,6 +37,28 @@ exports.createFood = async function ({ foodInput }, req) {
   };
 };
 
+exports.deleteFood = async function ({id}, req) {
+  if (!req.isAuth) {
+    UtilError.throwError(401, "not authenticated!");
+  }
+
+  const dbFood = await Food.findById(id);
+
+  if (!dbFood || dbFood.creator._id.toString() !== req.userId) {
+    // 404 is intentional, other users trying to get food
+    // from someone else should not know if they have the right id
+    UtilError.throwError(404, "food not found!");
+  }
+
+  try {
+    await Food.findByIdAndDelete(id);
+    return true
+  } catch (e) {
+    console.log(e)
+    return false
+  }
+}
+
 exports.getFood = async function ({ id }, req) {
   if (!req.isAuth) {
     UtilError.throwError(401, "not authenticated!");

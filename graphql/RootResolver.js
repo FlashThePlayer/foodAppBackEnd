@@ -4,6 +4,7 @@ const {
   createFood,
   getFoods,
   getFood,
+  deleteFood,
   getRandomFood,
 } = require("./resolvers/Food");
 
@@ -15,5 +16,6 @@ module.exports = {
   patchDay: patchDay,
   getFoods: getFoods,
   getFood: getFood,
+  deleteFood: deleteFood,
   getRandomFood: getRandomFood,
 };

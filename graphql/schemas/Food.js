@@ -45,6 +45,7 @@ type Query {
 }
 
 type Mutation {
+    deleteFood(id: String!): Boolean
     createFood(foodInput: FoodInputData): Food!
 } 
 `;
