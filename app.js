@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const graphHttp = require("express-graphql");
 const bodyParser = require("body-parser");
+const helmet = require("helmet");
 
 const graphResolver = require("./graphql/RootResolver");
 const graphSchema = require("./graphql/RootSchema");
@@ -12,6 +13,8 @@ const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO
 
 const app = express();
 app.disable('x-powered-by');
+
+app.use(helmet())
 
 app.use((req, res, next) => {
   //gotta better understand why im using this?!
