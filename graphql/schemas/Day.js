@@ -11,7 +11,7 @@ input DayInputData {
 }
 
 type Mutation {
-    patchDay(dayInput: DayInputData!): Day!
+    patchDay(dayInputs: [DayInputData!]!): [Day!]!
 } 
 
 type Query {

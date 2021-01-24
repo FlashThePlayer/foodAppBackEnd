@@ -2,11 +2,11 @@ const User = require("../../models/User");
 const Day = require("../../models/Day");
 const Food = require("../../models/Food");
 const UtilError = require("../../util/Error");
-const Query = require("../../util/QueryBuilder");
+
 
 const mongoose = require("mongoose");
 
-exports.patchDay = async function ({ dayInput }, req) {
+exports.patchDay = async function ({ dayInputs }, req) {
   if (!req.isAuth) {
     UtilError.throwError(401, "not authenticated!");
   }
@@ -16,35 +16,14 @@ exports.patchDay = async function ({ dayInput }, req) {
     UtilError.throwError(401, "user not found!");
   }
 
-  const dbDay = await Day.findOne({
-    date: dayInput.date,
-    creator: new mongoose.Types.ObjectId(req.userId),
-  });
-
-  const foodPromises = dayInput.foodId.map(foodId => Food.findById(foodId))
-  const foodArray = await Promise.all(foodPromises);
-
-  let day;
-
-  if (!dbDay) {
-    day = new Day({
-      date: dayInput.date,
-      creator: user,
-      foods: foodArray,
-    });
-  } else {
-    day = dbDay;
-    day.foods = foodArray;
+  let populatedDays = [];
+  for(let index in dayInputs) {
+    const populatedDay = await _patchDay(dayInputs[index], user);
+    populatedDays.push({ date: _yyyymmdd(populatedDay.date), meals: populatedDay.foods })
   }
 
-  const savedDay = await day.save();
-  const populatedDay = await Day.populate(savedDay, { path: "foods" });
-
-  return {
-    date: _yyyymmdd(populatedDay.date),
-    meals: populatedDay.foods,
-  };
-}
+  return populatedDays;
+};
 
 exports.getDays = async ({ date }, req) => {
   if (!req.isAuth) {
@@ -89,6 +68,32 @@ exports.getDays = async ({ date }, req) => {
     );
   }
 };
+
+const _patchDay = async function (dayInput, user) {
+  const dbDay = await Day.findOne({
+    date: dayInput.date,
+    creator: user,
+  });
+
+  const foodPromises = dayInput.foodId.map((foodId) => Food.findById(foodId));
+  const foodArray = await Promise.all(foodPromises);
+
+  let day;
+
+  if (!dbDay) {
+    day = new Day({
+      date: dayInput.date,
+      creator: user,
+      foods: foodArray,
+    });
+  } else {
+    day = dbDay;
+    day.foods = foodArray;
+  }
+
+  const savedDay = await day.save();
+  return await Day.populate(savedDay, {path: "foods"});
+}
 
 const _getWeek = (date) => {
   const sunday = new Date(date.setDate(date.getDate() - date.getDay()));
