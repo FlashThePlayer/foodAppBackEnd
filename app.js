@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const graphHttp = require("express-graphql");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
+const cors = require("cors");
 
 const graphResolver = require("./graphql/RootResolver");
 const graphSchema = require("./graphql/RootSchema");
@@ -15,20 +16,7 @@ const app = express();
 app.disable('x-powered-by');
 
 app.use(helmet())
-
-app.use((req, res, next) => {
-  //gotta better understand why im using this?!
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, PATCH, DELETE"
-  );
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-  next();
-});
+app.use(cors())
 
 app.use(auth);
 
