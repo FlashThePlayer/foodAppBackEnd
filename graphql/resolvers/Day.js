@@ -1,6 +1,7 @@
 const User = require("../../models/User");
 const Day = require("../../models/Day");
 const Food = require("../../models/Food");
+const FoodResolver = require("../resolvers/Food")
 const UtilError = require("../../util/Error");
 
 
@@ -16,13 +17,7 @@ exports.patchDay = async function ({ dayInputs }, req) {
     UtilError.throwError(401, "user not found!");
   }
 
-  let populatedDays = [];
-  for(let index in dayInputs) {
-    const populatedDay = await _patchDay(dayInputs[index], user);
-    populatedDays.push({ date: _yyyymmdd(populatedDay.date), meals: populatedDay.foods })
-  }
-
-  return populatedDays;
+  return await _populateDays(dayInputs);
 };
 
 exports.getDays = async ({ date }, req) => {
@@ -69,6 +64,28 @@ exports.getDays = async ({ date }, req) => {
   }
 };
 
+exports.randomizeDays = async function ({ dayInputs }, req) {
+  if (!req.isAuth) {
+    UtilError.throwError(401, "not authenticated!");
+  }
+
+  const user = await User.findById(req.userId);
+  if (!user) {
+    UtilError.throwError(401, "user not found!");
+  }
+
+  let populatedDays = await _populateDays(dayInputs);
+
+  for (const day of populatedDays) {
+    if ((Arrays.isArray(day.meals) && meals.length > 0) && !day.meals) {
+      const food = await FoodResolver.getRandomFood()
+      day.meals = [food];
+    }
+  }
+
+  return populatedDays;
+}
+
 const _patchDay = async function (dayInput, user) {
   const dbDay = await Day.findOne({
     date: dayInput.date,
@@ -93,6 +110,15 @@ const _patchDay = async function (dayInput, user) {
 
   const savedDay = await day.save();
   return await Day.populate(savedDay, {path: "foods"});
+}
+
+const _populateDays = async function (dayInputs) {
+  let populatedDays = [];
+  for(let index in dayInputs) {
+    const populatedDay = await _patchDay(dayInputs[index], user);
+    populatedDays.push({ date: _yyyymmdd(populatedDay.date), meals: populatedDay.foods })
+  }
+  return populatedDays;
 }
 
 const _getWeek = (date) => {
