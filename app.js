@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const graphHttp = require("express-graphql");
-const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const cors = require("cors");
 
@@ -49,8 +48,8 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(MONGODB_URI)
-  .then(result => {
-    console.log("server is up!");
-    app.listen(process.env.PORT || 3000);
+  .then(() => {
+      console.log("server is up!");
+      app.listen(process.env.PORT || 3000);
   })
   .catch(error => console.log(error));
