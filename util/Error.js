@@ -1,8 +1,5 @@
-exports.throwError = (code, message, errors) => {
+exports.throwError = (code, message) => {
   const error = new Error(message);
   error.code = code || 500;
-  if (errors) {
-    error.message = errors;
-  }
   throw error;
 };
