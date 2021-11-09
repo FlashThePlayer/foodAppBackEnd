@@ -67,8 +67,8 @@ exports.getFood = async function ({ id }, req) {
   const dbFood = await Food.findById(id);
 
   if (!dbFood || dbFood.creator._id.toString() !== req.userId) {
-    // 404 is intentional, other users trying to get food
-    // from someone else should not know if they have the right id
+    // 404 is intentional, other users trying to get food from someone else
+    // They should not know that they have the right id
     UtilError.throwError(404, "food not found!");
   }
 
