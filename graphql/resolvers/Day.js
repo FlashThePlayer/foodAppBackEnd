@@ -17,7 +17,7 @@ exports.patchDay = async function ({ dayInputs }, req) {
     UtilError.throwError(401, "user not found!");
   }
 
-  return await _populateDays(dayInputs);
+  return await _populateDays(dayInputs, user);
 };
 
 exports.getDays = async ({ date }, req) => {
@@ -112,7 +112,7 @@ const _patchDay = async function (dayInput, user) {
   return await Day.populate(savedDay, {path: "foods"});
 }
 
-const _populateDays = async function (dayInputs) {
+const _populateDays = async function (dayInputs, user) {
   let populatedDays = [];
   for(let index in dayInputs) {
     const populatedDay = await _patchDay(dayInputs[index], user);
