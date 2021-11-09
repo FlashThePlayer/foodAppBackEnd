@@ -25,7 +25,7 @@ app.use(
   graphHttp({
     schema: graphSchema,
     rootValue: graphResolver,
-    graphiql: true,
+    graphiql: process.env.NODE_ENV === "dev",
     customFormatErrorFn(err) {
       if (!err.originalError) {
         return err;
