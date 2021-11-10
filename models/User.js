@@ -7,7 +7,6 @@ const userSchema = new Schema(
     email: { type: String, required: true },
     password: { type: String, required: true },
     addedFood: [{ type: Schema.Types.ObjectId, ref: "Food", required: true }],
-    friends: [{ type: Schema.Types.ObjectId, ref: "User", required: false }]
   },
   { timestamps: true }
 );
