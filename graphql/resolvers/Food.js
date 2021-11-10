@@ -127,13 +127,9 @@ exports.getRandomFood = async function (args, req) {
   };
 };
 
-exports.getFoods = async ({ page, query }, req) => {
+exports.getFoods = async ({ page = 1, query }, req) => {
   if (!req.isAuth) {
     UtilError.throwError(401, "not authenticated!");
-  }
-
-  if (!page) {
-    page = 1;
   }
 
   const selectQuery = Query.build(query, req.userId);
