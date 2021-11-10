@@ -110,14 +110,17 @@ exports.getRandomFood = async function (args, req) {
     UtilError.throwError(401, "not authenticated!");
   }
 
-  const dbFoods = await Food.aggregate().sample(1); //returns an array
-  if (dbFoods.length <= 0) {
+  const selectQuery = Query.build({}, req.userId);
+  const foodCount = await Food.find(selectQuery).countDocuments();
+  const randomNumber = _getRandomInt(0, foodCount);
+  const randomFood = await Food.findOne(selectQuery).skip(randomNumber);
+
+  if (randomFood) {
     UtilError.throwError(401, "no food found!");
   }
 
-  const randomFood = dbFoods[0];
   return {
-    ...randomFood,
+    ...randomFood._doc,
     _id: randomFood._id.toString(),
     createdAt: randomFood.createdAt.toISOString(),
     updatedAt: randomFood.updatedAt.toISOString(),
@@ -155,3 +158,9 @@ exports.getFoods = async ({ page, query }, req) => {
     totalPages: maxPageSize,
   };
 };
+
+const _getRandomInt = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
