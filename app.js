@@ -9,7 +9,7 @@ const graphSchema = require("./graphql/RootSchema");
 
 const auth = require("./middleware/Authenticate");
 
-const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@nodecluster-knux1.mongodb.net/${process.env.MONGO_DATABASE}`;
+const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_URL}/${process.env.MONGO_DATABASE}`;
 
 const app = express();
 app.disable('x-powered-by');
