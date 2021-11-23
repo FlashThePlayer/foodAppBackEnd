@@ -9,13 +9,11 @@ const graphSchema = require("./graphql/RootSchema");
 
 const auth = require("./middleware/Authenticate");
 
-const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_URL}/${process.env.MONGO_DATABASE}`;
-
 const app = express();
-app.disable('x-powered-by');
+app.disable("x-powered-by");
 
-app.use(helmet())
-app.use(cors())
+app.use(helmet());
+app.use(cors());
 
 app.use(auth);
 
@@ -29,12 +27,13 @@ app.use(
       if (!err.originalError) {
         return err;
       } else {
+        console.log(err);
         const data = err.originalError;
         const message = err.message || "an error occured";
         const status = err.originalError.code || 500;
         return { message: message, code: status, data: data };
       }
-    }
+    },
   })
 );
 
@@ -47,9 +46,9 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect(MONGODB_URI)
+  .connect(process.env.MONGO_URI)
   .then(() => {
-      console.log("server is up!");
-      app.listen(process.env.PORT || 3000);
+    console.log("server is up!");
+    app.listen(process.env.EXPRESS_PORT || 3000);
   })
-  .catch(error => console.log(error));
+  .catch((error) => console.log(error));
