@@ -49,6 +49,6 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("server is up!");
-    app.listen(process.env.EXPRESS_PORT || 3000);
+    app.listen(process.env.PORT || 3000);
   })
   .catch((error) => console.log(error));

@@ -13,7 +13,7 @@ services:
     ports: [ "3000:3000" ]
     environment:
       NODE_ENV: ${NODE_ENV}
-      EXPRESS_PORT: ${EXPRESS_PORT}
+      PORT: ${PORT}
       MONGO_URI: ${MONGO_URI}
       AUTH_TOKEN_SEC: ${AUTH_TOKEN_SEC}
     depends_on:
