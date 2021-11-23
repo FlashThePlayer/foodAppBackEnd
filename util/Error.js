@@ -1,5 +1,5 @@
-exports.throwError = (code, message) => {
-  const error = new Error(message);
+exports.throwError = (code, originalError) => {
+  const error = new Error(JSON.stringify(originalError));
   error.code = code || 500;
   throw error;
 };
