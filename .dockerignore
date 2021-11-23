@@ -1,6 +1,7 @@
 node_modules
 .idea
 .git
+.env
 .gitignore
 README.md
 
