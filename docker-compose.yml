@@ -9,7 +9,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
 
   foodbackend:
-    image: tacar/food_app_backend:latest
+    image: tacar/foodappbackend:latest
     ports: [ "3000:3000" ]
     environment:
       NODE_ENV: ${NODE_ENV}

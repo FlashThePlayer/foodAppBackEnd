@@ -17,5 +17,4 @@ export PORT=3000
 export AUTH_TOKEN_SEC="dockerStage_!_456"
 export MONGO_URI="mongodb://foodAppUser:secret@database:27017/foodApp?authSource=admin"
 
-docker-compose build
 docker-compose up

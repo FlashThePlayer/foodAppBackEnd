@@ -10,4 +10,4 @@ EXPOSE 3000
 
 COPY . .
 
-ENTRYPOINT ["/usr/local/bin/npm", "run", "start"]
+ENTRYPOINT ["npm", "run", "start"]
