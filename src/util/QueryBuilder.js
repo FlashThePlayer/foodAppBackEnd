@@ -1,4 +1,4 @@
-const UtilError = require("../util/Error");
+const UtilError = require("./Error");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 exports.build = (query, userId) => {

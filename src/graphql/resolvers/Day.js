@@ -1,7 +1,7 @@
 const User = require("../../models/User");
 const Day = require("../../models/Day");
 const Food = require("../../models/Food");
-const FoodResolver = require("../resolvers/Food")
+const FoodResolver = require("./Food")
 const UtilError = require("../../util/Error");
 
 

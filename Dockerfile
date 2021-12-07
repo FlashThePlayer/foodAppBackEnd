@@ -8,6 +8,6 @@ RUN npm install --only=prod
 
 EXPOSE 3000
 
-COPY . .
+COPY ./dist .
 
 ENTRYPOINT ["npm", "run", "start"]

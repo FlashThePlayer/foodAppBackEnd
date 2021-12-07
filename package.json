@@ -2,12 +2,12 @@
   "name": "foodappbackend",
   "version": "1.0.0",
   "description": "backend for a little app for choosing and saving favourite food",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
-    "start:dev:nodemon": "nodemon -r dotenv/config app.js",
-    "start:dev:node": "node -r dotenv/config app.js"
+    "start": "node src/app.js",
+    "start:dev:nodemon": "nodemon -r dotenv/config src/app.js",
+    "start:dev:node": "node -r dotenv/config src/app.js"
   },
   "keywords": [
     "node",
@@ -25,10 +25,11 @@
     "jsonwebtoken": "^8.5.1",
     "merge-graphql-schemas": "^1.7.8",
     "mongoose": "^5.11.8",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "typescript": "^4.5.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.6",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "nodemon": "^2.0.6"
   }
 }
