@@ -1,4 +1,4 @@
-module.exports = `
+const daySchema = `
 
 type Day {
     meals: [Food!]
@@ -16,6 +16,9 @@ type Mutation {
 
 type Query {
     getDays(date: String!): [Day!]
+    randomizeDays(date: String!): [Day!]
 }
 
 `;
+
+export default daySchema;

@@ -1,10 +1,9 @@
-module.exports = `
+const userSchema = `
 type User {
     _id: ID!
     name: String!
     email: String!
     password: String
-    addedFood: [Food!]
 }
 
 input createUserInputData {
@@ -23,3 +22,5 @@ type Mutation {
     loginUser(userInput: loginUserInputData): String!
 }
 `;
+
+export default userSchema;

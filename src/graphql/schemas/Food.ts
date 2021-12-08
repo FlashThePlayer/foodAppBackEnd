@@ -1,15 +1,15 @@
-module.exports = `
+const foodSchema = `
 type Food {
     _id: ID!
     name: String!
-    link: String!
-    pictureLink: String!
+    link: String
+    pictureLink: String
     favorite: Boolean!
     rating: Int!
     difficulty: String!
     creator: User!
     keywords: [String!]
-    recipe: String!
+    recipe: String
     createdAt: String!
     updatedAt: String!
 }
@@ -49,3 +49,5 @@ type Mutation {
     createFood(foodInput: FoodInputData): Food!
 } 
 `;
+
+export default foodSchema;
