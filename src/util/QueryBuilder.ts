@@ -1,12 +1,14 @@
-const UtilError = require("./Error");
-const ObjectId = require("mongoose").Types.ObjectId;
+import throwError from "./Error";
+import { Types } from "mongoose";
+import { MongooseQuery } from "../types/CustomQuery";
+import { FoodQuery } from "../types/resolver/FoodResolver";
 
-exports.build = (query, userId) => {
+const queryBuilder = (query: FoodQuery, userId: string) => {
   if (!userId) {
-    UtilError.throwError(500, "query without a UserId is NOT valid!");
+    throwError(500, "query without a UserId is NOT valid!");
   }
 
-  let selectQuery = { creator: ObjectId(userId) };
+  let selectQuery: MongooseQuery = { creator: Types.ObjectId(userId) };
 
   if (query) {
     if (query.name) {
@@ -37,3 +39,5 @@ exports.build = (query, userId) => {
 
   return selectQuery;
 };
+
+export default queryBuilder;
