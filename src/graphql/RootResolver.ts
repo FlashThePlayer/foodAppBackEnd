@@ -1,14 +1,15 @@
-const { createUser, loginUser } = require("./resolvers/User");
-const { getDays, patchDay } = require("./resolvers/Day");
-const {
+import { createUser, loginUser } from "./resolvers/User";
+import { getDays, patchDay } from "./resolvers/Day";
+import {
   createFood,
   getFoods,
   getFood,
   deleteFood,
   getRandomFood,
-} = require("./resolvers/Food");
+  searchFood,
+} from "./resolvers/Food";
 
-module.exports = {
+const rootResolver = {
   createUser: createUser,
   loginUser: loginUser,
   createFood: createFood,
@@ -18,4 +19,7 @@ module.exports = {
   getFood: getFood,
   deleteFood: deleteFood,
   getRandomFood: getRandomFood,
+  searchFood: searchFood,
 };
+
+export default rootResolver;
