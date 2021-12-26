@@ -12,7 +12,11 @@ import CustomError from "./types/CustomError";
 const app = express();
 app.disable("x-powered-by");
 
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: process.env.NODE_ENV === "prod" ? undefined : false,
+  })
+);
 app.use(cors());
 
 app.use(authMiddleware);
