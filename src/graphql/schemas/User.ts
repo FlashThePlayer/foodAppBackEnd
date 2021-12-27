@@ -6,6 +6,12 @@ type User {
     password: String
 }
 
+type UserQueryResponse {
+    _id: ID!
+    name: String!
+    email: String!
+}
+
 input createUserInputData {
     name: String!
     password: String!
@@ -20,6 +26,11 @@ input loginUserInputData {
 type Mutation {
     createUser(userInput: createUserInputData): User!
     loginUser(userInput: loginUserInputData): String!
+    addFriend(id: String): String!
+}
+
+type Query {
+    getUser(name: String): [UserQueryResponse]
 }
 `;
 
