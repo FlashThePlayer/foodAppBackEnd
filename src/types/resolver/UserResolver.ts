@@ -10,6 +10,12 @@ interface UserInputData {
   password: string;
 }
 
+export interface UserQueryResponse {
+  _id?: string;
+  name: string;
+  email: string;
+}
+
 export interface CreateUserInputData extends UserInputData {
   name: string;
 }
@@ -22,4 +28,12 @@ export interface LoginUserResolver {
 
 export interface CreateUserResolver {
   userInput: CreateUserInputData;
+}
+
+export interface GetUserResolver {
+  name: string;
+}
+
+export interface AddFriendResolver {
+  id: string;
 }
