@@ -1,4 +1,4 @@
-import { createUser, loginUser } from "./resolvers/User";
+import { addFriend, createUser, getUser, loginUser } from "./resolvers/User";
 import { getDays, patchDay } from "./resolvers/Day";
 import {
   createFood,
@@ -20,6 +20,8 @@ const rootResolver = {
   deleteFood: deleteFood,
   getRandomFood: getRandomFood,
   searchFood: searchFood,
+  getUser: getUser,
+  addFriend: addFriend,
 };
 
 export default rootResolver;
