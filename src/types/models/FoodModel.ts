@@ -1,8 +1,8 @@
-import TimestampedDocument from "./TimestampedDocument";
+import BasisDocument from "./BasisDocument";
 import UserModel from "./UserModel";
 import { Types } from "mongoose";
 
-export default interface FoodModel extends TimestampedDocument<FoodModel> {
+export default interface FoodModel extends BasisDocument<FoodModel> {
   name: string;
   link?: string;
   pictureLink?: string;

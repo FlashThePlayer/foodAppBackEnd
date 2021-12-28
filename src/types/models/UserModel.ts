@@ -1,7 +1,7 @@
-import TimestampedDocument from "./TimestampedDocument";
+import BasisDocument from "./BasisDocument";
 import { Types } from "mongoose";
 
-export default interface UserModel extends TimestampedDocument<UserModel> {
+export default interface UserModel extends BasisDocument<UserModel> {
   name: string;
   email: string;
   password: string;
