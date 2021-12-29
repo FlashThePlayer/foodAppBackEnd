@@ -12,11 +12,11 @@ input DayInputData {
 
 type Mutation {
     patchDay(dayInputs: [DayInputData!]!): [Day!]!
+    randomizeDays(date: String!): [Day!]!
 } 
 
 type Query {
     getDays(date: String!): [Day!]
-    randomizeDays(date: String!): [Day!]
 }
 
 `;

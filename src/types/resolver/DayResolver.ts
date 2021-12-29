@@ -10,7 +10,7 @@ export interface Day {
   date: string;
 }
 
-interface DayResolver {
+export interface PatchDayResolver {
   dayInputs: DayInputData[];
 }
 
@@ -18,5 +18,6 @@ export interface GetDaysResolver {
   date: string;
 }
 
-export interface RandomizeDaysResolver extends DayResolver {}
-export interface PatchDayResolver extends DayResolver {}
+export interface RandomizeDaysResolver {
+  date: string;
+}
