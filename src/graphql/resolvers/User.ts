@@ -1,5 +1,6 @@
 import { hash, compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
+import { Types } from 'mongoose';
 import User from "../../models/User";
 import ServerRequest from "../../types/ServerRequest";
 import throwError from "../../util/Error";
@@ -9,6 +10,7 @@ import {
   GetUserResolver,
   LoginUserResolver,
 } from "../../types/resolver/UserResolver";
+import UserModel from "../../types/models/UserModel";
 
 export const createUser = async function (
   { userInput }: CreateUserResolver,
@@ -93,10 +95,7 @@ export const getUser = async function (
   }
 };
 
-export const addFriend = async function (
-  { id }: AddFriendResolver,
-  req: ServerRequest
-) {
+export const addFriend = async function ({ id }: AddFriendResolver, req: ServerRequest) {
   if (!req.isAuth) {
     throwError(401, "not authenticated!");
   }
@@ -106,27 +105,41 @@ export const addFriend = async function (
 
     if (!user) {
       throwError(404, "user not found!");
-    }
-
-    if (!userToAdd) {
-      throwError(404, "friend not found!");
-    }
-
-    if (user!.friends && Array.isArray(user!.friends)) {
-      // @ts-ignore
-      if(user!.friends.includes(id)) {
-        return "user was already added";
-      }
-      user!.friends.push(userToAdd!._id);
     } else {
-      user!.friends = [userToAdd!._id];
+      if (!userToAdd) {
+        throwError(404, "friend not found!");
+      } else {
+        if (user.friends && Array.isArray(user.friends)) {
+          if(containsUser(user.friends, id)) {
+            return "user was already added";
+          }
+          user.friends.push(userToAdd._id);
+        } else {
+          user.friends = [userToAdd._id];
+        }
+        await user.save()
+
+        return "added!";
+      }
     }
-
-    await user!.save()
-
-    return "added!";
   } catch (error: any) {
     console.log(error);
     throwError(error.code, error);
   }
 };
+
+const containsUser = (array: UserModel[] | Types.ObjectId[], id: string) => {
+  let returnValue = false;
+  array.forEach(obj => {
+    if (isUserModel(obj)) {
+      returnValue = obj._id === id;
+    } else {
+      returnValue = obj.toString() === id;
+    }
+  })
+  return returnValue;
+}
+
+const isUserModel = (obj: UserModel | any): obj is UserModel => {
+  return (obj && obj.name && typeof obj.name === 'string');
+}
